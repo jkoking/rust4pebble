@@ -13,13 +13,15 @@ fn main() {
     let target = var("TARGET").expect("get the rustc target");
 
     let out_dir = var("OUT_DIR").expect("get output directory from Cargo");
+    let version = var("CARGO_CFG_PEBBLE_SDK_VERSION").unwrap_or("current".to_string());
     let out_path = Path::new(&out_dir);
 
     let include_paths = vec![
         current_dir()
             .expect("get the current directory")
             .join("include"),
-        locate_sdk(&target).join("include"),
+        locate_sdk(&target, &version).join("include"),
+        locate_toolchain(&version).join("include"),
         generate_headers(&out_path),
     ];
 
@@ -51,8 +53,7 @@ fn check_platform(target: &str, version: &str, platform: &str) {
     println!("cargo:rustc-cfg=pebble_sdk_platform=\"{}\"", platform);
 }
 
-fn locate_sdk(target: &str) -> PathBuf {
-    let version = var("CARGO_CFG_PEBBLE_SDK_VERSION").unwrap_or("current".to_string());
+fn locate_sdk(target: &str, version: &str) -> PathBuf {
     let platform = var("CARGO_CFG_PEBBLE_SDK_PLATFORM").unwrap_or("aplite".to_string());
 
     check_platform(target, &version, &platform);
@@ -75,6 +76,22 @@ fn locate_sdk(target: &str) -> PathBuf {
     println!("cargo:rustc-link-lib=pebble");
 
     path
+}
+
+fn locate_toolchain(version: &str) -> PathBuf {
+let path = env::home_dir()
+.map(| dir | {
+    dir.join(match var("CARGO_CFG_TARGET_OS").as_deref() {
+        Ok("macos") => "Library/Application Support/Pebble SDK",
+        _ => ".pebble-sdk",
+    })
+    .join("SDKs/")
+    .join(&version)
+    .join("toolchain/arm-none-eabi/arm-none-eabi")
+})
+.expect("determine toolchain location");
+
+path
 }
 
 fn generate_headers(out_path: &Path) -> PathBuf {
