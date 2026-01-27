@@ -36,7 +36,7 @@ fn main() {
 
 fn check_platform(target: &str, version: &str, platform: &str) {
     println!("cargo:rustc-check-cfg=cfg(pebble_sdk_version)");
-    println!("cargo:rustc-check-cfg=cfg(pebble_sdk_platform, values(\"aplite\", \"basalt\", \"chalk\", \"diorite\", \"emery\" \"flint\"))");
+    println!("cargo:rustc-check-cfg=cfg(pebble_sdk_platform, values(\"aplite\", \"basalt\", \"chalk\", \"diorite\", \"emery\", \"flint\"))");
 
     let expected = match platform {
         "aplite" => "thumbv7m-none-eabi",
