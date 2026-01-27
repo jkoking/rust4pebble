@@ -36,11 +36,12 @@ fn main() {
 
 fn check_platform(target: &str, version: &str, platform: &str) {
     println!("cargo:rustc-check-cfg=cfg(pebble_sdk_version)");
-    println!("cargo:rustc-check-cfg=cfg(pebble_sdk_platform, values(\"aplite\", \"basalt\", \"chalk\", \"diorite\"))");
+    println!("cargo:rustc-check-cfg=cfg(pebble_sdk_platform, values(\"aplite\", \"basalt\", \"chalk\", \"diorite\", \"emery\" \"flint\"))");
 
     let expected = match platform {
         "aplite" => "thumbv7m-none-eabi",
         "basalt" | "chalk" | "diorite" => "thumbv7em-none-eabi",
+        "emery" | "flint" => "thumbv8m.main-none-eabihf",
         _ => panic!("Unknown platform: {}", platform),
     };
     assert_eq!(

@@ -10,4 +10,5 @@ pebblesdk-sys = { workspace = true }
 targets = [
   "thumbv7em-none-eabi",
   "thumbv7m-none-eabi",
+  "thumbv8m.main-none-eabihf",
 ]
