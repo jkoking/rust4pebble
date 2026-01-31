@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 pebblesdk-sys = { workspace = true }
+cty = { workspace = true }
 
 [package.metadata.docs.rs]
 targets = [

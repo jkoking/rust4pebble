@@ -145,6 +145,7 @@ dependencies = [
 name = "pebblesdk"
 version = "0.1.0"
 dependencies = [
+ "cty",
  "pebblesdk-sys",
 ]
 
